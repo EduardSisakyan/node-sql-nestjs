@@ -45,5 +45,6 @@ export class UserEntity extends BaseEntity {
     this.passwordTmp = this.password;
   }
 
+  @Exclude()
   private passwordTmp: string;
 }
