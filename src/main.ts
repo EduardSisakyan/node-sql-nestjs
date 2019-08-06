@@ -5,16 +5,19 @@ import * as jwt from 'jsonwebtoken';
 import { ApplicationModule } from './app.module';
 import { UserEntity } from './entities/user.entity';
 import { getRepository } from 'typeorm';
-import { SECRET } from './shared/helpers/config';
+import { Config } from './shared/helpers/config';
+
+
 
 async function bootstrap() {
   const appOptions = { cors: true };
   const app = await NestFactory.create(ApplicationModule, appOptions);
   app.setGlobalPrefix('api');
+
   app.use(async(req, res, next) => {
     if (req.headers && req.headers.authorization) {
       const token = req.headers.authorization.toString();
-      const userInfo: any = jwt.verify(token, SECRET);
+      const userInfo: any = jwt.verify(token, Config.SECRET_KEY);
       const user = await getRepository(UserEntity).findOne(userInfo.id);
   
       if (user) {

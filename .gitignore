@@ -16,7 +16,7 @@ node_modules
 
 #config files
 ormconfig.json
-src/shared/helpers/config.ts
+config.json
 
 # code testing coverage
 coverage

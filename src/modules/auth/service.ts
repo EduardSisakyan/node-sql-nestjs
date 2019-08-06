@@ -6,7 +6,7 @@ import * as jwt    from 'jsonwebtoken';
 import * as crypto from 'crypto';
 
 import { UserEntity } from '../../entities/user.entity';
-import { SECRET } from '../../shared/helpers/config';
+import { Config } from '../../shared/helpers/config';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CustomException } from '../../shared/models/custom-exception';
 
@@ -23,12 +23,11 @@ export class AuthService {
     const exp = new Date(today);
     exp.setDate(today.getDate() + 60);
 
-    const findOneOptions = {
+    const user =  await this.userRepository.findOne({
       username : loginUserDto.username,
       password : crypto.createHmac('sha256', loginUserDto.password).digest('hex'),
-    };
+    });
 
-    const user =  await this.userRepository.findOne(findOneOptions);
     if (!user) throw new CustomException('Username or password is incrorrect');
 
     const token = jwt.sign({
@@ -36,7 +35,7 @@ export class AuthService {
       username : user.username,
       email    : user.email,
       exp      : exp.getTime() / 1000,
-    }, SECRET);
+    }, Config.SECRET_KEY);
 
     return { token };
   }
