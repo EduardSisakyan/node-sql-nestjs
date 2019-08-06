@@ -5,21 +5,21 @@ export class CreateUserDto {
 
   @ApiModelProperty()
   @MinLength(6)
-  readonly username: string;
+  username: string;
 
   @ApiModelProperty()
   @IsNotEmpty()
-  readonly firstName: string;
+  firstName: string;
 
   @ApiModelProperty()
   @IsNotEmpty()
-  readonly lastName: string;
+  lastName: string;
 
   @ApiModelProperty()
   @IsEmail()
-  readonly email: string;
+  email: string;
 
   @ApiModelProperty()
   @MinLength(6)
-  readonly password: string;
+  password: string;
 }

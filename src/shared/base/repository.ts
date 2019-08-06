@@ -1,11 +1,32 @@
-import { Repository, FindConditions, FindManyOptions, SelectQueryBuilder } from "typeorm";
+import { Repository, FindConditions, FindManyOptions, SelectQueryBuilder } from 'typeorm';
 
-import { BaseEntity } from "./entity";
-import { IPaginationOptions } from "../interfaces/pagination-options";
-import { Pagination } from "../models/pagination";
+import { BaseEntity } from './entity';
+import { IPaginationOptions } from '../interfaces/pagination-options';
+import { Pagination } from '../models/pagination';
+import { validate, ValidationError } from 'class-validator';
+import { CustomException } from '../models/custom-exception';
+import { DeleteConditions } from '../types/delete';
 
 
 export class BaseRepository<T extends BaseEntity> extends Repository<T> {
+
+  public async deleteOrFail(condition: DeleteConditions<T>, message?: string): Promise<boolean> {
+    const res = await this.delete(condition);
+    if (res.affected) {
+      return true;
+    } else {
+      throw new CustomException(message || 'Item not found');
+    }
+  }
+
+  public async validateOrFail(entity: T): Promise<boolean> {
+    const errors = await validate(entity);
+    if (errors.length > 0) {
+      throw new CustomException(this.buildError(errors));
+    } else {
+      return true;
+    }
+  }
 
   public async paginate(options: IPaginationOptions, searchOptions?: FindConditions<T> | FindManyOptions<T>): Promise<Pagination<T>> {
     const [ page, limit ] = this.resolveOptions(options);
@@ -16,7 +37,7 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
       ...searchOptions
     });
 
-    return this.createPaginationObject<T>(items, total, limit);
+    return this.createPaginationObject(items, total, limit);
   }
 
   public async paginateQueryBuilder(queryBuilder: SelectQueryBuilder<T>, options: IPaginationOptions): Promise<Pagination<T>> {
@@ -27,10 +48,20 @@ export class BaseRepository<T extends BaseEntity> extends Repository<T> {
       .offset(page * limit)
       .getManyAndCount();
 
-    return this.createPaginationObject<T>(items, total, limit);
+    return this.createPaginationObject(items, total, limit);
   }
 
-  private createPaginationObject<T>(items: T[], total: number, limit: number) {
+  private buildError(errors: ValidationError[]) {
+    const result = [];
+    errors.forEach(el => {
+      Object.entries(el.constraints).forEach(constraint => {
+        result.push(constraint[1]);
+      });
+    });
+    return result.join(', ');
+  }
+
+  private createPaginationObject(items: T[], total: number, limit: number) {
     return new Pagination(items, items.length, total, Math.ceil(total / limit));
   }
 

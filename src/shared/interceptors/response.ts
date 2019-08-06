@@ -18,7 +18,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ResponseModel<
             data,
             success: true,
             message: 'ok',
-          })
+          });
         }),
         tap(() => console.log(`${context.switchToHttp().getRequest().url} - ${Date.now() - now}ms`)),
       );

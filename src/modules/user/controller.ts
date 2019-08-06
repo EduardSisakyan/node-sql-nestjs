@@ -16,7 +16,7 @@ import { FindOneParams } from './dto/find-one-params';
 export class UserController {
 
   constructor(
-    private readonly userService: UserService,
+    private userService: UserService,
   ) {}
 
   @Get('me')

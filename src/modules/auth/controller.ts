@@ -12,13 +12,13 @@ import { LoginUserDto } from './dto/login-user.dto';
 export class AuthController {
 
   constructor(
-    private readonly authService: AuthService,
+    private authService: AuthService,
   ) {}
 
 
   @UsePipes(ValidationPipe)
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    return await this.authService.generateJWT(loginUserDto)
+    return await this.authService.generateJWT(loginUserDto);
   }
 }

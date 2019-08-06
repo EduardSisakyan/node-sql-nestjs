@@ -1,5 +1,5 @@
-import { Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { Exclude } from "class-transformer";
+import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 export class BaseEntity {
 

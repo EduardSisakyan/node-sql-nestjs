@@ -15,12 +15,12 @@ export class AuthService {
 
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private userRepository: Repository<UserEntity>,
   ) {}
 
   public async generateJWT(loginUserDto: LoginUserDto) {
-    let today = new Date();
-    let exp = new Date(today);
+    const today = new Date();
+    const exp = new Date(today);
     exp.setDate(today.getDate() + 60);
 
     const findOneOptions = {
@@ -39,5 +39,5 @@ export class AuthService {
     }, SECRET);
 
     return { token };
-  };
+  }
 }
