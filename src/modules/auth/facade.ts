@@ -1,21 +1,17 @@
-import { Injectable }       from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository }       from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
-import * as jwt    from 'jsonwebtoken';
-import * as crypto from 'crypto';
+import * as jwt from 'jsonwebtoken';
 
-import { UserEntity } from '../../entities/user.entity';
 import { Config } from '../../shared/helpers/config';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CustomException } from '../../shared/models/custom-exception';
+import { UserService } from '../user/service';
 
 @Injectable()
-export class AuthService {
+export class AuthFacade {
 
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private userService: UserService,
   ) {}
 
   public async generateJWT(loginUserDto: LoginUserDto) {
@@ -23,9 +19,9 @@ export class AuthService {
     const exp = new Date(today);
     exp.setDate(today.getDate() + 60);
 
-    const user =  await this.userRepository.findOne({
+    const user = await this.userService.findOne({
       username : loginUserDto.username,
-      password : crypto.createHmac('sha256', loginUserDto.password).digest('hex'),
+      password : loginUserDto.password,
     });
 
     if (!user) throw new CustomException('Username or password is incrorrect');

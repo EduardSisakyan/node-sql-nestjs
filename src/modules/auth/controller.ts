@@ -1,10 +1,8 @@
-import { Post, Controller, UsePipes, Body } from '@nestjs/common';
-
-import { AuthService } from './service';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+import { Post, Controller, Body } from '@nestjs/common';
 
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login-user.dto';
+import { AuthFacade } from './facade';
 
 @ApiBearerAuth()
 @ApiUseTags('Auth')
@@ -12,13 +10,12 @@ import { LoginUserDto } from './dto/login-user.dto';
 export class AuthController {
 
   constructor(
-    private authService: AuthService,
+    private authFacade: AuthFacade,
   ) {}
 
 
-  @UsePipes(ValidationPipe)
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
-    return await this.authService.generateJWT(loginUserDto);
+    return await this.authFacade.generateJWT(loginUserDto);
   }
 }

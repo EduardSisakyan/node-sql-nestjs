@@ -2,7 +2,7 @@
 import { IsNumberString } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class FindOneParams {
+export class FindOneParamsDTO {
   
   @ApiModelProperty()
   @IsNumberString()

@@ -1,14 +1,13 @@
-import { Get, Post, Delete, Param, Controller, UsePipes, Body, UseGuards } from '@nestjs/common';
+import { Get, Post, Delete, Param, Controller, Body, UseGuards } from '@nestjs/common';
 
-import { UserService } from './service';
-import { CreateUserDto } from './dto/create-user';
-import { ValidationPipe } from '../../shared/pipes/validation.pipe';
+import { CreateUserDTO } from './dto/create-user';
 
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '../../shared/guards/auth';
 import { UserEntity } from '../../entities/user.entity';
 import { User } from '../../shared/decorators/user';
-import { FindOneParams } from './dto/find-one-params';
+import { FindOneParamsDTO } from './dto/find-one-params';
+import { UserFacade } from './facade';
 
 @ApiBearerAuth()
 @ApiUseTags('user')
@@ -16,7 +15,7 @@ import { FindOneParams } from './dto/find-one-params';
 export class UserController {
 
   constructor(
-    private userService: UserService,
+    private userFacade: UserFacade,
   ) {}
 
   @Get('me')
@@ -27,18 +26,16 @@ export class UserController {
 
   @Get('all')
   async allUsers() {
-    return await this.userService.findAll();
+    return await this.userFacade.findAll();
   }
 
   @Post('create')
-  @UsePipes(ValidationPipe)
-  async create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDTO) {
+    return this.userFacade.create(createUserDto);
   }
 
   @Delete('delete/:id')
-  @UsePipes(ValidationPipe)
-  async delete(@Param() params: FindOneParams) {
-    return await this.userService.delete(params.id);
+  async delete(@Param() params: FindOneParamsDTO) {
+    return await this.userFacade.delete(params);
   }
 }

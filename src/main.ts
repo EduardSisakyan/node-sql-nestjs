@@ -6,13 +6,13 @@ import { ApplicationModule } from './app.module';
 import { UserEntity } from './entities/user.entity';
 import { getRepository } from 'typeorm';
 import { Config } from './shared/helpers/config';
-
-
+import { ValidationPipe } from './shared/pipes/validation.pipe';
 
 async function bootstrap() {
   const appOptions = { cors: true };
   const app = await NestFactory.create(ApplicationModule, appOptions);
   app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe());
 
   app.use(async(req, res, next) => {
     if (req.headers && req.headers.authorization) {

@@ -1,4 +1,4 @@
-import { EntityRepository, Not, Equal, IsNull } from 'typeorm';
+import { EntityRepository, Not, IsNull } from 'typeorm';
 import { UserEntity } from '../../entities/user.entity';
 import { BaseRepository } from '../../shared/base/repository';
 import { CustomException } from '../../shared/models/custom-exception';
