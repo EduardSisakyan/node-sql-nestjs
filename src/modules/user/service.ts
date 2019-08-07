@@ -17,8 +17,31 @@ export class UserService {
     private userRepository: UserRepository,
   ) {}
 
-  public async findAll() {
-    return await this.userRepository.find();
+  public async findAll(filter?: UsersFilterDTO) {
+
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'role');
+
+    if (filter) {
+      if (filter.firstName) {
+        query.where(`user.firstName like :firstName`, { firstName: `%${filter.firstName}%` });
+      }
+
+      if (filter.lastName) {
+        query.where(`user.lastName like :lastName`, { lastName: `%${filter.lastName}%` });
+      }
+
+      if (filter.username) {
+        query.where(`user.username like :username`, { username: `%${filter.username}%` });
+      }
+
+      if (filter.email) {
+        query.where(`user.email like :email`, { email: `%${filter.email}%` });
+      }
+    }
+    return await query
+      .getMany();
   }
 
   public async create(createUserDto: CreateUserDTO) {

@@ -10,6 +10,7 @@ import { FindOneParamsDTO } from './dto/find-one-params';
 import { UserFacade } from './facade';
 import { UserPreviewDTO } from './dto/user-preview';
 import { plainToClass } from 'class-transformer';
+import { UsersFilterDTO } from './dto/user-filter';
 
 @ApiBearerAuth()
 @ApiUseTags('user')
@@ -26,9 +27,9 @@ export class UserController {
     return plainToClass(UserPreviewDTO, user);
   }
 
-  @Get('all')
-  async allUsers() {
-    return await this.userFacade.findAll();
+  @Post('all')
+  async allUsers(@Body() usersFilterDTO: UsersFilterDTO) {
+    return await this.userFacade.findAll(usersFilterDTO);
   }
 
   @Post('create')

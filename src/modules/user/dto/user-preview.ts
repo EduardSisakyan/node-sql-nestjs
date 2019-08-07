@@ -22,6 +22,6 @@ export class UserPreviewDTO {
   email: string;
 
   @Expose()
-  @Transform((value: RoleEntity[]) => value.map(x => x.role), { toPlainOnly: true })
+  @Transform((value: RoleEntity[]) => (value || []).map(x => x.role), { toPlainOnly: true })
   roles: RoleEnum[];
 }

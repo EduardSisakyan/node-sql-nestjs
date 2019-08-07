@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 
 import { UserService } from './service';
 import { CreateUserDTO } from './dto/create-user';
 
 import { FindOneParamsDTO } from './dto/find-one-params';
-import { plainToClass } from 'class-transformer';
 import { UserPreviewDTO } from './dto/user-preview';
+import { UsersFilterDTO } from './dto/user-filter';
 
 @Injectable()
 export class UserFacade {
@@ -14,8 +15,8 @@ export class UserFacade {
     private userService: UserService,
   ) {}
 
-  async findAll() {
-    const data = await this.userService.findAll();
+  async findAll(usersFilterDTO: UsersFilterDTO) {
+    const data = await this.userService.findAll(usersFilterDTO);
     return plainToClass(UserPreviewDTO, data);
   }
 
