@@ -1,9 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, AfterLoad } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, AfterLoad, ManyToMany, JoinTable } from 'typeorm';
 import { IsEmail } from 'class-validator';
 import * as crypto from 'crypto';
 import { Exclude } from 'class-transformer';
 
 import { BaseEntity } from '../shared/base/entity';
+import { RoleEnum } from '../shared/enums/role';
+import { RoleEntity } from './role.entity';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -23,6 +25,10 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   @IsEmail()
   email: string;
+
+  @ManyToMany(type => RoleEntity, role => role.users, { cascade: true, eager: true })
+  @JoinTable()
+  roles: (RoleEntity | RoleEnum)[];
 
   @Column()
   @Exclude()

@@ -4,6 +4,8 @@ import { UserService } from './service';
 import { CreateUserDTO } from './dto/create-user';
 
 import { FindOneParamsDTO } from './dto/find-one-params';
+import { plainToClass } from 'class-transformer';
+import { UserPreviewDTO } from './dto/user-preview';
 
 @Injectable()
 export class UserFacade {
@@ -13,11 +15,13 @@ export class UserFacade {
   ) {}
 
   async findAll() {
-    return await this.userService.findAll();
+    const data = await this.userService.findAll();
+    return plainToClass(UserPreviewDTO, data);
   }
 
   async create(createUserDto: CreateUserDTO) {
-    return this.userService.create(createUserDto);
+    const data = await this.userService.create(createUserDto);
+    return plainToClass(UserPreviewDTO, data);
   }
 
   async delete(params: FindOneParamsDTO) {

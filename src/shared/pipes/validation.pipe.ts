@@ -20,7 +20,7 @@ export class ValidationPipe implements PipeTransform<any> {
     if (errors.length > 0) {
       throw new CustomException(this.buildError(errors));
     }
-    return value;
+    return object;
   }
 
   private buildError(errors): string {

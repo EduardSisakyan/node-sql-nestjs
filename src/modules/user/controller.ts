@@ -1,4 +1,4 @@
-import { Get, Post, Delete, Param, Controller, Body, UseGuards } from '@nestjs/common';
+import { Get, Post, Delete, Param, Controller, Body, UseGuards, ClassSerializerInterceptor, UseInterceptors, SerializeOptions } from '@nestjs/common';
 
 import { CreateUserDTO } from './dto/create-user';
 
@@ -8,6 +8,8 @@ import { UserEntity } from '../../entities/user.entity';
 import { User } from '../../shared/decorators/user';
 import { FindOneParamsDTO } from './dto/find-one-params';
 import { UserFacade } from './facade';
+import { UserPreviewDTO } from './dto/user-preview';
+import { plainToClass } from 'class-transformer';
 
 @ApiBearerAuth()
 @ApiUseTags('user')
@@ -21,7 +23,7 @@ export class UserController {
   @Get('me')
   @UseGuards(AuthGuard)
   async findMe(@User() user: UserEntity) {
-    return user;
+    return plainToClass(UserPreviewDTO, user);
   }
 
   @Get('all')

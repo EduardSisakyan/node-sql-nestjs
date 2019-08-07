@@ -4,11 +4,16 @@ import * as crypto from 'crypto';
 import { CreateUserDTO } from './dto/create-user';
 import { UserRepository } from './repository';
 import { UsersFilterDTO } from './dto/user-filter';
+import { RoleEntity } from '../../entities/role.entity';
+import { Repository, In } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
 
   constructor(
+    @InjectRepository(RoleEntity)
+    private readonly roleRepository: Repository<RoleEntity>,
     private userRepository: UserRepository,
   ) {}
 
@@ -23,6 +28,7 @@ export class UserService {
     newUser.password = createUserDto.password;
     newUser.firstName = createUserDto.firstName;
     newUser.lastName = createUserDto.lastName;
+    newUser.roles = await this.roleRepository.find({ role: In(createUserDto.roles) });
 
     await this.userRepository.validateOrFail(newUser);
 

@@ -11,10 +11,12 @@ import { UserModule } from './modules/user/module';
 import { ResponseInterceptor } from './shared/interceptors/response';
 import { ErrorsInterceptor } from './shared/interceptors/error';
 import { AuthModule } from './modules/auth/module';
+import { RoleEntity } from './entities/role.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
+    TypeOrmModule.forFeature([ RoleEntity ]),
     UserModule,
     AuthModule,
   ],
