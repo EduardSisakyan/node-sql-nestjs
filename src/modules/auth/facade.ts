@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 
 import { Config } from '../../shared/helpers/config';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LoginUserDTO } from './dto/login-user.dto';
 import { CustomException } from '../../shared/models/custom-exception';
 import { UserService } from '../user/service';
 import { AuthService } from './service';
@@ -15,7 +15,7 @@ export class AuthFacade {
     private authService: AuthService,
   ) {}
 
-  public async generateJWT(loginUserDto: LoginUserDto) {
+  public async generateJWT(loginUserDto: LoginUserDTO) {
     const user = await this.userService.findOne(loginUserDto);
 
     if (!user) {

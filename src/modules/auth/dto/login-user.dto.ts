@@ -1,9 +1,9 @@
-import { IsNotEmpty } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 import { Expose, Exclude } from 'class-transformer';
 
 @Exclude()
-export class LoginUserDto {
+export class LoginUserDTO {
 
   @IsNotEmpty()
   @ApiModelProperty()

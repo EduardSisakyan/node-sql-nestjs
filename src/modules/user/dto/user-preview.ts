@@ -1,5 +1,6 @@
-import { RoleEnum } from '../../../shared/enums/role';
 import { Exclude, Transform, Expose } from 'class-transformer';
+
+import { RoleEnum } from '../../../shared/enums/role';
 import { RoleEntity } from '../../../entities/role.entity';
 
 @Exclude()

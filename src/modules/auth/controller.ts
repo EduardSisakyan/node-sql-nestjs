@@ -1,7 +1,7 @@
 import { Post, Controller, Body } from '@nestjs/common';
 
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LoginUserDTO } from './dto/login-user.dto';
 import { AuthFacade } from './facade';
 
 @ApiBearerAuth()
@@ -15,7 +15,7 @@ export class AuthController {
 
 
   @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto) {
+  async login(@Body() loginUserDto: LoginUserDTO) {
     return await this.authFacade.generateJWT(loginUserDto);
   }
 }
