@@ -24,20 +24,28 @@ export class UserService {
       .leftJoinAndSelect('user.roles', 'role');
 
     if (filter) {
+      if (filter.ids.length) {
+        query.where(`user.id = (:...ids)`, { ids: filter.ids });
+      }
+
       if (filter.firstName) {
-        query.where(`user.firstName like :firstName`, { firstName: `%${filter.firstName}%` });
+        query.where(`user.firstName LIKE :firstName`, { firstName: `%${filter.firstName}%` });
       }
 
       if (filter.lastName) {
-        query.where(`user.lastName like :lastName`, { lastName: `%${filter.lastName}%` });
+        query.where(`user.lastName LIKE :lastName`, { lastName: `%${filter.lastName}%` });
       }
 
       if (filter.username) {
-        query.where(`user.username like :username`, { username: `%${filter.username}%` });
+        query.where(`user.username LIKE :username`, { username: `%${filter.username}%` });
       }
 
       if (filter.email) {
-        query.where(`user.email like :email`, { email: `%${filter.email}%` });
+        query.where(`user.email LIKE :email`, { email: `%${filter.email}%` });
+      }
+
+      if (filter.roles.length) {
+        query.where(`role.role IN (:...roles)`, { roles: filter.roles });
       }
     }
     return await query

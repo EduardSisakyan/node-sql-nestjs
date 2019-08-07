@@ -1,14 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, AfterLoad, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, AfterLoad, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { IsEmail } from 'class-validator';
 import * as crypto from 'crypto';
 import { Exclude } from 'class-transformer';
 
-import { BaseEntity } from '../shared/base/entity';
 import { RoleEnum } from '../shared/enums/role';
 import { RoleEntity } from './role.entity';
 
 @Entity('user')
-export class UserEntity extends BaseEntity {
+export class UserEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -33,6 +32,13 @@ export class UserEntity extends BaseEntity {
   @Column()
   @Exclude()
   password: string;
+
+  @CreateDateColumn({ type: 'datetime' })
+  createdDt: Date;
+
+  @CreateDateColumn()
+  @UpdateDateColumn({ type: 'datetime' })
+  updatedDt: Date;
 
   @Exclude()
   private passwordTmp: string;

@@ -1,6 +1,5 @@
 import { Repository, FindConditions, FindManyOptions, SelectQueryBuilder } from 'typeorm';
 
-import { BaseEntity } from './entity';
 import { IPaginationOptions } from '../interfaces/pagination-options';
 import { Pagination } from '../models/pagination';
 import { validate, ValidationError } from 'class-validator';
@@ -8,7 +7,7 @@ import { CustomException } from '../models/custom-exception';
 import { DeleteConditions } from '../types/delete';
 
 
-export class BaseRepository<T extends BaseEntity> extends Repository<T> {
+export class BaseRepository<T> extends Repository<T> {
 
   public async deleteOrFail(condition: DeleteConditions<T>, message?: string): Promise<boolean> {
     const res = await this.delete(condition);

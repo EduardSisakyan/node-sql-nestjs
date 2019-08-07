@@ -1,11 +1,18 @@
 import { Exclude, Expose } from 'class-transformer';
 import { RoleEnum } from '../../../shared/enums/role';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNumber } from 'class-validator';
 import { Default } from '../../../shared/decorators/default';
 
 @Exclude()
 export class UsersFilterDTO {
+
+  @Expose()
+  @ApiModelProperty()
+  @IsOptional()
+  @Default([])
+  @IsNumber(null, { each: true })
+  ids?: number[];
 
   @Expose()
   @ApiModelProperty()
