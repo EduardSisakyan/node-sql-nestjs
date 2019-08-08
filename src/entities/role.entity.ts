@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 import { RoleEnum } from '../shared/enums/role';
 import { UserEntity } from './user.entity';
 
-@Entity('role')
+@Entity('roles')
 export class RoleEntity {
 
   @PrimaryGeneratedColumn()

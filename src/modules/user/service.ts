@@ -7,6 +7,7 @@ import { UsersFilterDTO } from './dto/user-filter';
 import { RoleEntity } from '../../entities/role.entity';
 import { Repository, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { USER_ROLE } from '../../shared/constants/db-names';
 
 @Injectable()
 export class UserService {
@@ -45,15 +46,21 @@ export class UserService {
       }
 
       if (filter.roles.length) {
-        query.where(`role.role IN (:...roles)`, { roles: filter.roles });
+        let existQuery = '';
+        const prefix = ' AND ';
+        filter.roles.forEach(x => {
+          existQuery += `EXISTS (SELECT * from ${USER_ROLE} WHERE user.id = ${USER_ROLE}.userId AND ${USER_ROLE}.roleId = ${x})${prefix}`;
+        });
+        query.where(existQuery.slice(0, existQuery.length - prefix.length));
       }
     }
+    
     return await query
       .getMany();
   }
 
   public async create(createUserDto: CreateUserDTO) {
-    const newUser = this.userRepository.createModel();
+    const newUser = this.userRepository.create();
     newUser.username = createUserDto.username;
     newUser.email = createUserDto.email;
     newUser.password = createUserDto.password;

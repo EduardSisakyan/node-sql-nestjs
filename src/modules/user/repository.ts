@@ -20,8 +20,4 @@ export class UserRepository extends BaseRepository<UserEntity> {
 
     return true;
   }
-
-  public createModel(): UserEntity {
-    return new UserEntity();
-  }
 }

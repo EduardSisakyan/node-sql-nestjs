@@ -5,8 +5,9 @@ import { Exclude } from 'class-transformer';
 
 import { RoleEnum } from '../shared/enums/role';
 import { RoleEntity } from './role.entity';
+import { USER_ROLE } from '../shared/constants/db-names';
 
-@Entity('user')
+@Entity('users')
 export class UserEntity {
 
   @PrimaryGeneratedColumn()
@@ -26,7 +27,7 @@ export class UserEntity {
   email: string;
 
   @ManyToMany(type => RoleEntity, role => role.users, { cascade: true, eager: true })
-  @JoinTable()
+  @JoinTable({ name: USER_ROLE, joinColumn: { name: 'userId' }, inverseJoinColumn: { name: 'roleId' } })
   roles: (RoleEntity | RoleEnum)[];
 
   @Column()
